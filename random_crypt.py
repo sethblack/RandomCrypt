@@ -7,8 +7,7 @@ client storage while minimizing the probability of brute-force attack.
 """
 
 from base64 import b64encode
-import ctypes
-import random
+from random import choice
 import string
 
 class RandomCrypt():
@@ -18,7 +17,7 @@ class RandomCrypt():
 	self.key_length = len(self.key_bytes)
 
     def randomize(self, value):
-	randomized_string = [value[i / 2] if i % 2 else random.choice(string.ascii_letters) for i in xrange(len(value) * 2)]
+	randomized_string = [value[i / 2] if i % 2 else choice(string.ascii_letters) for i in xrange(len(value) * 2)]
 	return bytearray(randomized_string)
 
     def derandomize(self, value):
@@ -27,11 +26,9 @@ class RandomCrypt():
 
     def encrypt(self, value):
 	return self.digest(self.randomize(value))
-	#return self.digest(value)
 
     def decrypt(self, value):
 	return self.derandomize(self.digest(value, True))
-	#return self.digest(value, True)
 
     def digest(self, value, decrypt = False):
 	value_bytes = bytearray(value)
